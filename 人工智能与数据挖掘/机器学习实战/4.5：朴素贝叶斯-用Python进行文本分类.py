@@ -1,5 +1,8 @@
 import numpy
 
+# #####设置区域#####
+abusive_dictionary = {1: '侮辱性文章', 0: '非侮辱性文章'}  # 字典型
+
 
 # #####函数声明区域#####
 def load_data_set():  # 生成简单的训练用文章数据集
@@ -82,15 +85,14 @@ def train_naive_bayes_ver1(train_matrix, train_category):  # 第1版本的朴素
     return p0_vector_logged, p1_vector_logged, p_abusive
 
 
-def classify_naive_bayes(vec2Classify, p0Vec, p1Vec, pClass1):  # 贝叶斯分类器（根据朴素贝叶斯概率计算器算出的结果）
-    abusive_dictionary = {1: '侮辱性文章', 0: '非侮辱性文章'}  # 字典型
+def classify_naive_bayes(vec2classify, p0vec, p1vec, p_class1):  # 贝叶斯分类器（根据朴素贝叶斯概率计算器算出的结果）
     # p(是这个类型|出现这些词汇)=(p(出现这些词汇|是这个类型)p(是这个类型))/p(是这个类型)（计算时分母省略，分子取log）
-    p1 = sum(vec2Classify * p1Vec) + numpy.log(pClass1)  # 计算log(p(出现这些词汇|侮辱性文章)p(侮辱性文章))
-    p0 = sum(vec2Classify * p0Vec) + numpy.log(1.0 - pClass1)  # 计算log(p(出现这些词汇|非侮辱性文章)p(非侮辱性文章))
+    p1 = sum(vec2classify * p1vec) + numpy.log(p_class1)  # 计算log(p(出现这些词汇|侮辱性文章)p(侮辱性文章))
+    p0 = sum(vec2classify * p0vec) + numpy.log(1.0 - p_class1)  # 计算log(p(出现这些词汇|非侮辱性文章)p(非侮辱性文章))
     if p1 > p0:
-        return abusive_dictionary[1]
+        return 1
     else:
-        return abusive_dictionary[0]
+        return 0
 
 
 # def testing_naive_bayes():  # 贝叶斯分类器测试代码
@@ -139,7 +141,7 @@ print('p(侮辱性文章）为：', POfAbusive)
 print('----------进行分类测试----------')
 testEntry = ['love', 'my', 'dalmation']
 thisDoc = numpy.array(set_of_words_to_vec(myVocabularyList, testEntry))
-print(testEntry, '这篇文章的分类是: ', classify_naive_bayes(thisDoc, p0Vector, P1Vector, POfAbusive))
+print(testEntry, '这篇文章的分类是: ', abusive_dictionary[classify_naive_bayes(thisDoc, p0Vector, P1Vector, POfAbusive)])
 testEntry = ['stupid', 'garbage']
 thisDoc = numpy.array(set_of_words_to_vec(myVocabularyList, testEntry))
-print(testEntry, '这篇文章的分类是: ', classify_naive_bayes(thisDoc, p0Vector, P1Vector, POfAbusive))
+print(testEntry, '这篇文章的分类是: ', abusive_dictionary[classify_naive_bayes(thisDoc, p0Vector, P1Vector, POfAbusive)])
