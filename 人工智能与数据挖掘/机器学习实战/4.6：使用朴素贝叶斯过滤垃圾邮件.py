@@ -1,9 +1,9 @@
 import numpy
 
 # #####设置区域#####
-spamEmail = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch04\email\spam'  # 训练数据源文件路径
-hamEmail = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch04\email\ham'  # 测试数据源文件路径
 abusiveDictionary = {1: '侮辱性文章', 0: '非侮辱性文章'}  # 字典型
+spamEmail = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch04\email\spam'  # 普通邮件源文件路径
+hamEmail = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch04\email\ham'  # 垃圾邮件源文件路径
 
 
 # #####函数声明区域#####
