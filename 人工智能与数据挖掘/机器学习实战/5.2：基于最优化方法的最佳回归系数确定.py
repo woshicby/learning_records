@@ -1,7 +1,7 @@
 import numpy
 # #####设置区域#####
 # 设置路径
-sourceFilePath = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch05\testSet.txt'  # 隐形眼镜数据源文件路径
+sourceFilePath = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch05\testSet.txt'  # 用于训练分类的源文件路径
 
 
 # #####函数声明区域#####
@@ -35,6 +35,7 @@ def grad_ascent0(data_mat_in, class_labels, num_iter=500):  # 逻辑回归梯度
         weights_history[k, :] = weights.A.flatten()
     print(weights.A.flatten())
     return weights.A.flatten(), weights_history
+
 
 def grad_ascent1(data_mat_in, class_labels, num_iter=500):  # 改进版逻辑回归梯度上升（每个数据点都用，步长随轮数减小）
     data_matrix = numpy.mat(data_mat_in)  # 转为numpy矩阵
@@ -174,11 +175,11 @@ def plot_history(my_hist):  # 画参数和迭代轮次的图像（原本是在EX
 dataArr, labelMat = load_data_set()
 print('-----逻辑回归梯度上升-----')
 weights_of_00, weightHistory_of_00 = grad_ascent0(dataArr, labelMat, 500)
-plot_best_fit(weights_of_00, '逐个遍历梯度上升')
+plot_best_fit(weights_of_00, '逻辑回归梯度上升')
 plot_history(weightHistory_of_00)
-print('-----逻辑回归梯度上升-----')
+print('-----逻辑回归梯度上升（步长下降）-----')
 weights_of_01, weightHistory_of_01 = grad_ascent1(dataArr, labelMat, 500)
-plot_best_fit(weights_of_01, '逐个遍历梯度上升')
+plot_best_fit(weights_of_01, '逻辑回归梯度上升（步长下降）')
 plot_history(weightHistory_of_01)
 dataMat = numpy.array(dataArr)  # 把dataArr转为numpy数组
 print('-----逐个遍历梯度上升-----')
@@ -193,7 +194,7 @@ print('-----随机遍历梯度上升-----')
 weights_of_20, weightHistory_of_20 = stoch_grad_ascent0(dataMat, labelMat)
 plot_best_fit(weights_of_20, '随机遍历梯度上升')
 plot_history(weightHistory_of_20)
-print('-----随机梯度上升（多扫几轮）-----')
+print('-----随机遍历梯度上升（多扫几轮）-----')
 weights_of_21, weightHistory_of_21 = stoch_grad_ascent1(dataMat, labelMat, 500)
-plot_best_fit(weights_of_21, '逐个遍历梯度上升（多扫几轮）')
+plot_best_fit(weights_of_21, '随机遍历梯度上升（多扫几轮）')
 plot_history(weightHistory_of_21)
