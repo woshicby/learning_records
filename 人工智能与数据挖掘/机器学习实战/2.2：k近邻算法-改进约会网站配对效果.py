@@ -3,7 +3,6 @@ import operator
 import matplotlib
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d as p3d
-
 # #####设置区域#####
 sourceFilePath = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch02\datingTestSet.txt'  # 训练数据源文件路径
 
@@ -67,6 +66,7 @@ def draw2d(dating_data_mat, dating_labels, i, j):
 def draw3d(dating_data_mat, dating_labels):
     # 绘制散点图
     matplotlib.rcParams['font.family'] = matplotlib.rcParams['font.sans-serif'] = 'SimHei'  # 设置中文支持，中文字体为简体黑体
+    matplotlib.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
     fig = matplotlib.pyplot.figure()
     ax = p3d.Axes3D(fig, auto_add_to_figure=False)
     fig.add_axes(ax)
@@ -123,5 +123,5 @@ def classify_person():  # 人的分类器
 
 
 # #####执行区域#####
-# dating_class_test()
-classify_person()
+dating_class_test()
+# classify_person()
