@@ -1,5 +1,4 @@
 import numpy
-
 # #####设置区域#####
 # 设置路径
 sourceFilePath = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch05\testSet.txt'  # 隐形眼镜数据源文件路径
@@ -22,19 +21,35 @@ def sigmoid(in_x):  # sigmoid函数
 
 
 # #####梯度上升相关函数开始#####
-def grad_ascent(data_mat_in, class_labels):  # 逻辑回归梯度上升（每个数据点都用）
+def grad_ascent0(data_mat_in, class_labels, num_iter=500):  # 逻辑回归梯度上升（每个数据点都用）
     data_matrix = numpy.mat(data_mat_in)  # 转为numpy矩阵
     label_mat = numpy.mat(class_labels).transpose()  # 转为numpy矩阵
     m, n = numpy.shape(data_matrix)
     alpha = 0.01  # 步长
-    max_cycles = 500  # 最大迭代轮次
     weights = numpy.ones((n, 1))  # 初始化回归系数向量
-    for k in range(max_cycles):  # 进行max_cycles轮的循环
+    weights_history = numpy.zeros((num_iter, n))
+    for k in range(num_iter):  # 进行max_cycles轮的循环
         h = sigmoid(data_matrix * weights)  # 对矩阵全部元素求sigmoid函数值（结果理论上应该很接近0或者1）
         error = label_mat - h  # 求与实际label的差距
         weights = weights + alpha * data_matrix.transpose() * error  # 更新回归矩阵向量值，矩阵求导的结论
-    print(weights)
-    return weights
+        weights_history[k, :] = weights.A.flatten()
+    print(weights.A.flatten())
+    return weights.A.flatten(), weights_history
+
+def grad_ascent1(data_mat_in, class_labels, num_iter=500):  # 改进版逻辑回归梯度上升（每个数据点都用，步长随轮数减小）
+    data_matrix = numpy.mat(data_mat_in)  # 转为numpy矩阵
+    label_mat = numpy.mat(class_labels).transpose()  # 转为numpy矩阵
+    m, n = numpy.shape(data_matrix)
+    weights = numpy.ones((n, 1))  # 初始化回归系数向量
+    weights_history = numpy.zeros((num_iter, n))
+    for k in range(num_iter):  # 进行max_cycles轮的循环
+        alpha = 4 / (1.0 + k) + 0.01  # 步长随迭代轮数减小(调参用）
+        h = sigmoid(data_matrix * weights)  # 对矩阵全部元素求sigmoid函数值（结果理论上应该很接近0或者1）
+        error = label_mat - h  # 求与实际label的差距
+        weights = weights + alpha * data_matrix.transpose() * error  # 更新回归矩阵向量值，矩阵求导的结论
+        weights_history[k, :] = weights.A.flatten()
+    print(weights.A.flatten())
+    return weights.A.flatten(), weights_history
 
 
 def one_by_one_grad_ascent0(data_matrix, class_labels):  # 逐个梯度上升算法（stochastic gradient ascent algorith）
@@ -96,7 +111,7 @@ def stoch_grad_ascent1(data_matrix, class_labels, num_iter=500):  # 随机梯度
             weights = weights + alpha * error * data_matrix[rand_index]
             weights_history[j * m + i, :] = weights
             del (data_index[rand_index])  # 学过就移出学习名单
-    print(weights)
+    print(weights.flatten())
     return weights, weights_history
 
 
@@ -156,23 +171,29 @@ def plot_history(my_hist):  # 画参数和迭代轮次的图像（原本是在EX
 
 # #####绘图相关函数结束#####
 # #####执行区域#####
-print('-----逻辑回归梯度上升-----')
 dataArr, labelMat = load_data_set()
-plot_best_fit(grad_ascent(dataArr, labelMat).getA(), '逻辑回归梯度上升')  # get(A)将numpy矩阵转化成数组形式
+print('-----逻辑回归梯度上升-----')
+weights_of_00, weightHistory_of_00 = grad_ascent0(dataArr, labelMat, 500)
+plot_best_fit(weights_of_00, '逐个遍历梯度上升')
+plot_history(weightHistory_of_00)
+print('-----逻辑回归梯度上升-----')
+weights_of_01, weightHistory_of_01 = grad_ascent1(dataArr, labelMat, 500)
+plot_best_fit(weights_of_01, '逐个遍历梯度上升')
+plot_history(weightHistory_of_01)
 dataMat = numpy.array(dataArr)  # 把dataArr转为numpy数组
 print('-----逐个遍历梯度上升-----')
-weights_of_0, weightHistory_of_0 = one_by_one_grad_ascent0(dataMat, labelMat)
-plot_best_fit(weights_of_0, '逐个遍历梯度上升')
-plot_history(weightHistory_of_0)
+weights_of_10, weightHistory_of_10 = one_by_one_grad_ascent0(dataMat, labelMat)
+plot_best_fit(weights_of_10, '逐个遍历梯度上升')
+plot_history(weightHistory_of_10)
 print('-----逐个遍历梯度上升（多扫几轮）-----')
-weights_of_0_1, weightHistory_of_0_1 = one_by_one_grad_ascent1(dataMat, labelMat, 500)
-plot_best_fit(weights_of_0_1, '逐个遍历梯度上升（多扫几轮）')
-plot_history(weightHistory_of_0_1)
+weights_of_11, weightHistory_of_11 = one_by_one_grad_ascent1(dataMat, labelMat, 500)
+plot_best_fit(weights_of_11, '逐个遍历梯度上升（多扫几轮）')
+plot_history(weightHistory_of_11)
 print('-----随机遍历梯度上升-----')
-weights_of_0, weightHistory_of_0 = stoch_grad_ascent0(dataMat, labelMat)
-plot_best_fit(weights_of_0, '随机遍历梯度上升')
-plot_history(weightHistory_of_0)
+weights_of_20, weightHistory_of_20 = stoch_grad_ascent0(dataMat, labelMat)
+plot_best_fit(weights_of_20, '随机遍历梯度上升')
+plot_history(weightHistory_of_20)
 print('-----随机梯度上升（多扫几轮）-----')
-weights_of_1, weightHistory_of_1 = stoch_grad_ascent1(dataMat, labelMat, 500)
-plot_best_fit(weights_of_1, '逐个遍历梯度上升（多扫几轮）')
-plot_history(weightHistory_of_1)
+weights_of_21, weightHistory_of_21 = stoch_grad_ascent1(dataMat, labelMat, 500)
+plot_best_fit(weights_of_21, '逐个遍历梯度上升（多扫几轮）')
+plot_history(weightHistory_of_21)
