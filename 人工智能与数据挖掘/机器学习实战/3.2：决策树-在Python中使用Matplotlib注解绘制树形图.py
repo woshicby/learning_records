@@ -215,11 +215,12 @@ def retrieve_tree(i):  # 预先存储树的信息（用于测试）
 def plot_mid_text(cntr_pt, parent_pt, txt_string):  # 在父与子节点中间填充文本信息
     x_mid = (parent_pt[0] - cntr_pt[0]) / 2.0 + cntr_pt[0]
     y_mid = (parent_pt[1] - cntr_pt[1]) / 2.0 + cntr_pt[1]
-    create_plot.ax1.text(x_mid, y_mid + 0.03, txt_string, va="center", ha="center", rotation=0)
+    create_plot.ax1.text(x_mid, y_mid + 0.03, txt_string, va="center", ha="center", rotation=30)
 
 
 def create_plot(in_tree):  # 画图函数
     matplotlib.rcParams['font.family'] = matplotlib.rcParams['font.sans-serif'] = 'SimHei'  # 设置中文支持，中文字体为简体黑体
+    matplotlib.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
     fig = plt.figure(1, facecolor='white')
     fig.clf()
     axprops = dict(xticks=[], yticks=[])
