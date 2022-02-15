@@ -85,8 +85,8 @@ def choose_best_feature_to_split(data_set):  # 选择最好的划分方式(按�
         # print('以第', i, '维划分的信息增益为：', info_gain)
         if info_gain > best_info_gain:  # 把正在计算的这个和目前最好的相比较
             best_info_gain = info_gain  # 更好的就替换
-            best_feature = i  # 最好的划分特征也替换为当前特征
-    return best_feature  # 返回最好的划分特征对应的维数
+            best_feature = i  # 最好地划分特征也替换为当前特征
+    return best_feature  # 返回最好地划分特征对应的维数
 
 
 def choose_best_feature_to_split_gini(data_set):  # 选择最好的划分方式(按照基尼不纯度）
@@ -108,8 +108,8 @@ def choose_best_feature_to_split_gini(data_set):  # 选择最好的划分方式(
         # print('以第', i, '维划分的信息增益为：', info_gain)
         if info_gain > best_info_gain:  # 把正在计算的这个和目前最好的相比较
             best_info_gain = info_gain  # 更好的就替换
-            best_feature = i  # 最好的划分特征也替换为当前特征
-    return best_feature  # 返回最好的划分特征对应的维数
+            best_feature = i  # 最好地划分特征也替换为当前特征
+    return best_feature  # 返回最好地划分特征对应的维数
 
 
 def majority_cnt(class_list):  # 投票表决法获取class_list中出现最多次的标签（解决特征都用完，仍然有不同标签的问题）
@@ -132,9 +132,9 @@ def create_tree(data_set, labels):  # 创建决策树(按照香农熵）
     if len(data_set[0]) == 1:  # 若没有特征可用于划分（只剩下一项标签了）
         return majority_cnt(class_list)  # 返回当前列表里最多见的特征（投票法）（叶节点）
     # 分支节点
-    best_feat = choose_best_feature_to_split(data_set)  # 获得最好的划分特征编号
-    best_feat_label = sub_labels[best_feat]  # 获得最好的划分特征
-    my_tree = {best_feat_label: {}}  # 初始化分支节点字典（字典的值也是一个字典，用于装入下层节点）
+    best_feat = choose_best_feature_to_split(data_set)  # 获得最好地划分特征编号
+    best_feat_label = sub_labels[best_feat]  # 获得最好地划分特征
+    my_tree = {best_feat_label: {}}  # 初始化分支节点字典（字典的值也是一部字典，用于装入下层节点）
     del (sub_labels[best_feat])  # 在标签列表里删掉最好特征（划分完后数据列里也没这项了）
     feat_values = [example[best_feat] for example in data_set]  # 创建一个这个最好特征的所有值的列表
     unique_vals = set(feat_values)  # 转换为集合
@@ -153,9 +153,9 @@ def create_tree_gini(data_set, labels):  # 创建决策树(按照基尼不纯度
     if len(data_set[0]) == 1:  # 若没有特征可用于划分（只剩下一项标签了）
         return majority_cnt(class_list)  # 返回当前列表里最多见的特征（投票法）（叶节点）
     # 分支节点
-    best_feat = choose_best_feature_to_split_gini(data_set)  # 获得最好的划分特征编号
-    best_feat_label = sub_labels[best_feat]  # 获得最好的划分特征
-    my_tree = {best_feat_label: {}}  # 初始化分支节点字典（字典的值也是一个字典，用于装入下层节点）
+    best_feat = choose_best_feature_to_split_gini(data_set)  # 获得最好地划分特征编号
+    best_feat_label = sub_labels[best_feat]  # 获得最好地划分特征
+    my_tree = {best_feat_label: {}}  # 初始化分支节点字典（字典的值也是一部字典，用于装入下层节点）
     del (sub_labels[best_feat])  # 在标签列表里删掉最好特征（划分完后数据列里也没这项了）
     feat_values = [example[best_feat] for example in data_set]  # 创建一个这个最好特征的所有值的列表
     unique_vals = set(feat_values)  # 转换为集合
@@ -223,6 +223,7 @@ def plot_mid_text(cntr_pt, parent_pt, txt_string):  # 在父与子节点中间�
 
 def create_plot(in_tree):  # 画图函数
     matplotlib.rcParams['font.family'] = matplotlib.rcParams['font.sans-serif'] = 'SimHei'  # 设置中文支持，中文字体为简体黑体
+    matplotlib.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
     fig = plt.figure(1, facecolor='white')
     fig.clf()
     axprops = dict(xticks=[], yticks=[])
