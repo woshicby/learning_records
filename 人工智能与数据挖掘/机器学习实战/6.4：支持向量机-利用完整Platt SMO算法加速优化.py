@@ -1,5 +1,4 @@
 import numpy
-
 # #####设置区域#####
 sourceFile = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch06\testSet.txt'
 
@@ -46,13 +45,13 @@ class OptStruct:  # 定义选项结构体
 
 
 def calc_error_k(opt_struct, k):  # 求k位置的误差并返回
-    f_xk = float(numpy.multiply(opt_struct.alphas, opt_struct.labelMat).T * opt_struct.X * opt_struct.X[k,:].T + opt_struct.b)
+    f_xk = float(numpy.multiply(opt_struct.alphas, opt_struct.labelMat).T * opt_struct.X * opt_struct.X[k, :].T + opt_struct.b)
     error_k = f_xk - float(opt_struct.labelMat[k])
     return error_k
 
 
-def select_j(i, opt_struct, error_i):  # 选择第二个alpha/内循环的alpha值 -heurstic, and calcs error_j
-    max_k = -1  # 初始化最大位置k为-1
+def select_j(i, opt_struct, error_i):  # 选择第二个alpha/内循环的alpha值，并返回j和error_j
+    max_k = -1  # 初始化最大位置k为-1a
     max_delta_error = 0  # 初始化最大delta_error为0
     error_j = 0  # 初始化返回的error_j=0
     opt_struct.eCache[i] = [1, error_i]  # 设置有i的有效标志位 #choose the alpha that gives the maximum delta E
@@ -113,11 +112,11 @@ def inner_loop(i, opt_struct):  # 内层循环（和简化版操作差不多，�
         # 为ai、aj设置一组常数项
         b1 = opt_struct.b - error_i - opt_struct.labelMat[i] * (opt_struct.alphas[i] - alpha_i_old) * opt_struct.X[i, :] * opt_struct.X[i, :].T - opt_struct.labelMat[j] * (opt_struct.alphas[j] - alpha_j_old) * opt_struct.X[i, :] * opt_struct.X[i, :].T
         b2 = opt_struct.b - error_j - opt_struct.labelMat[i] * (opt_struct.alphas[i] - alpha_i_old) * opt_struct.X[i, :] * opt_struct.X[i, :].T - opt_struct.labelMat[j] * (opt_struct.alphas[j] - alpha_j_old) * opt_struct.X[i, :] * opt_struct.X[i, :].T
-        if (0 < opt_struct.alphas[i]) and (opt_struct.C > opt_struct.alphas[i]):
+        if (0 < opt_struct.alphas[i]) and (opt_struct.C > opt_struct.alphas[i]):  # 0<ai<c，b取b1
             opt_struct.b = b1
-        elif (0 < opt_struct.alphas[j]) and (opt_struct.C > opt_struct.alphas[j]):
+        elif (0 < opt_struct.alphas[j]) and (opt_struct.C > opt_struct.alphas[j]):  # 0<aj<c，b取b2
             opt_struct.b = b2
-        else:
+        else:  # 两个都不在0和c之间，b取b1、b2的平均值
             opt_struct.b = (b1 + b2) / 2.0
         return 1  # 返回1，有变化
     else:
@@ -160,7 +159,7 @@ def calc_w_array(alphas, data_arr, class_labels):  # 计算超平面
     return w
 
 
-def classify_test(alphas, data_arr, class_labels, b):#新写的测试器
+def classify_test(alphas, data_arr, class_labels, b):  # 新写的测试器
     dat_mat = numpy.mat(data_arr)
     results = [(dat_mat[i] * numpy.mat(calc_w_array(alphas, data_arr, class_labels)) + b) for i in range(numpy.shape(dat_mat)[0])]
     error_count = 0
