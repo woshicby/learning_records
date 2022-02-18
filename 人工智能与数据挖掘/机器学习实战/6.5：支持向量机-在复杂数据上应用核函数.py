@@ -1,5 +1,4 @@
 import numpy
-
 # #####设置区域#####
 TrainsFile = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch06\testSetRBF.txt'
 TestFile = r'D:\Desktop\新建文件夹\machinelearninginaction3x-master\Ch06\testSetRBF2.txt'
@@ -175,15 +174,15 @@ def test_rbf(k1=1.3):  # 径向基函数测试
     b, alphas = smo_platt(data_arr, label_arr, 200, 0.0001, 10000, ('rbf', k1))  # C=200 important
     dat_mat = numpy.mat(data_arr)
     label_mat = numpy.mat(label_arr).transpose()
-    sv_ind = numpy.nonzero(alphas.A > 0)[0]
-    s_vs = dat_mat[sv_ind]  # get matrix of only support vectors
-    label_sv = label_mat[sv_ind]
-    print("有%d个支持向量" % numpy.shape(s_vs)[0])
+    sv_index = numpy.nonzero(alphas.A > 0)[0]
+    select_vs = dat_mat[sv_index]  # 只要支持向量的矩阵
+    label_sv = label_mat[sv_index]
+    print("有%d个支持向量" % numpy.shape(select_vs)[0])
     m, n = numpy.shape(dat_mat)
     error_count = 0
     for i in range(m):
-        kernel_eval = kernel_trans(s_vs, dat_mat[i, :], ('rbf', k1))
-        predict = kernel_eval.T * numpy.multiply(label_sv, alphas[sv_ind]) + b
+        kernel_eval = kernel_trans(select_vs, dat_mat[i, :], ('rbf', k1))
+        predict = kernel_eval.T * numpy.multiply(label_sv, alphas[sv_index]) + b
         if numpy.sign(predict) != numpy.sign(label_arr[i]):
             error_count += 1
     print("训练组的错误率为：%f" % (float(error_count) / m))
@@ -193,8 +192,8 @@ def test_rbf(k1=1.3):  # 径向基函数测试
     # label_mat = numpy.mat(label_arr).transpose()
     m, n = numpy.shape(dat_mat)
     for i in range(m):
-        kernel_eval = kernel_trans(s_vs, dat_mat[i, :], ('rbf', k1))
-        predict = kernel_eval.T * numpy.multiply(label_sv, alphas[sv_ind]) + b
+        kernel_eval = kernel_trans(select_vs, dat_mat[i, :], ('rbf', k1))
+        predict = kernel_eval.T * numpy.multiply(label_sv, alphas[sv_index]) + b
         if numpy.sign(predict) != numpy.sign(label_arr[i]):
             error_count += 1
     print("测试组的错误率为：%f" % (float(error_count) / m))
