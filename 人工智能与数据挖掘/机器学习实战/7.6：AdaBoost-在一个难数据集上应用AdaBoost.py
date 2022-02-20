@@ -23,7 +23,7 @@ def load_data_set(file_name):  # 解析由\t分割的浮点数的通用函数
     return data_mat, label_mat
 
 
-def stump_classify(data_matrix, dimension, thresh_val, thresh_ineq):  # just classify the data
+def stump_classify(data_matrix, dimension, thresh_val, thresh_ineq):  # 仅仅是分类数据
     ret_array = numpy.ones((numpy.shape(data_matrix)[0], 1))
     if thresh_ineq == '小于':
         ret_array[data_matrix[:, dimension] <= thresh_val] = -1.0
