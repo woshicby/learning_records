@@ -1,5 +1,5 @@
 # Created on Jan 8, 2011/创建于2011年1月8日
-# Translated on Feb 21, 2022/翻译于2022年2月23日
+# Translated on Feb 23, 2022/翻译于2022年2月23日
 #
 # @author/作者:Peter
 # @translator/翻译: woshicby
