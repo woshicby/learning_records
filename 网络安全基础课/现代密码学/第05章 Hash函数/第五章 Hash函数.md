@@ -163,21 +163,35 @@ SM3信息扩展过程：![SM3信息扩展过程](第五章 Hash函数.assets/SM3
 
 步骤④：压缩函数：有$A,B,C,D,E,F,G,H$八个字寄存器，$SS_1,SS_2,TT_1,TT_2$四个中间变量，压缩函数$V^{(i+1)}=CF(V^{(i)},B^{(i)})(0\le i\le n-1)$的计算过程如下：
 $$
-ABCDEFGH=V^{[i]}\\
-FORj=0\ to\ 63\\
-\ \ \ \ SS_1\leftarrow((A\lll12)+E+(T_j\lll j))\lll7\\
-\ \ \ \ SS_2=SS1\oplus(A\lll12)\\
-\ \ \ \ TT_1=FF_j(A,B,C)+D+SS_2+W^{'}_j\\
-\ \ \ \ TT_2=GG_j(E,F,G)+H+SS_1+W_j\\
-\ \ \ \ D=C\\
-\ \ \ \ C=B\lll9\\
-\ \ \ \ B=A
-\ \ \ \ A=TT_1\\
-\ \ \ \ H=G\\
-\ \ \ \ G=F\lll19\\
-\ \ \ \ F=E\\
-\ \ \ \ E=P_0(TT_2)\\
-ENDFOR\\
-V^{[i+1]}=ABCDEFGH\oplus V^{(i)}\\
+\begin{aligned}
+&ABCDEFGH=V^{[i]}\\
+&FOR\quad j=0\quad to\quad 63\\
+&\begin{aligned}
+&\qquad\qquad SS_1&\leftarrow&((A\lll12)+E+(T_j\lll j))\lll7\\
+&\qquad\qquad SS_2&=&SS1\oplus(A\lll12)\\
+&\qquad\qquad TT_1&=&FF_j(A,B,C)+D+SS_2+W^{'}_j\\
+&\qquad\qquad TT_2&=&GG_j(E,F,G)+H+SS_1+W_j\\
+&\qquad\qquad D&=&C\\
+&\qquad\qquad C&=&B\lll9\\
+&\qquad\qquad B&=&A\\
+&\qquad\qquad A&=&TT_1\\
+&\qquad\qquad H&=&G\\
+&\qquad\qquad G&=&F\lll19\\
+&\qquad\qquad F&=&E\\
+&\qquad\qquad E&=&P_0(TT_2)
+&\end{aligned}\\
+&ENDFOR\\
+&V^{[i+1]}=ABCDEFGH\oplus V^{(i)}\\
+\end{aligned}
 $$
 
+其中+为模$2^{32}$加运算，字的存储为大端模式。
+
+步骤⑤：输出哈希值：$Hash(m)=ABCDEFGH=V^{(L)}$。
+
+SM3产生消息哈希值的过程：![SM3产生消息哈希值的过程](第五章 Hash函数.assets/SM3产生消息哈希值的过程.png)
+
+压缩函数是哈希函数安全的关键：
+①SM3的压缩函数CF中的布尔函数$FF_j(X,Y,Z)$和$GG_j(X,Y,Z)$是非线性函数，经过循环迭代后提供**混淆**作用。
+②置换函数$P_0(x)$和$P_1(x)$是线性函数，经过循环迭代后提供**扩散**作用。
+③再加上CF中的其他运算的共同作用，压缩函数CF具有很高的安全性，从而确保SM3具有很高的安全性。
