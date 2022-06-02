@@ -6,6 +6,8 @@
 
 《高等代数》下：https://www.icourse163.org/learn/XMU-1002554004
 
+《高等代数习题课》：https://www.icourse163.org/course/XMU-1462086163
+
 # 学习进度表：
 
 本表格将上、下两门慕课合并列出，迅速推进。
